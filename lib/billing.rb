@@ -1,11 +1,19 @@
 require "billing/version"
 # Classe do Ruby para manipular arquivos CSV
 require "csv"
+# Gem para validação de arquivos CSV
+require 'csvlint'
 
 module Billing
   class Bill
 
-    # Método para encontrar no arquivo o número
+    # Método para validação do arquivo.
+    def validate
+      validator = Csvlint::Validator.new( File.new("#{ARGV[0]}" ))
+      validator.valid?
+    end
+
+    # Método que encontra os resultados no arquivo passado como parâmetro.
     def find_by_number number
       results = []
       CSV.foreach("#{ARGV[0]}", {:col_sep => ';'}) do |row|
@@ -16,7 +24,7 @@ module Billing
       results
     end
 
-    # Método para identificar o tipo de chamada.
+    # Método que define o tipo de serviço.
     def call_type tpserv
       type = nil
       case tpserv
@@ -31,7 +39,7 @@ module Billing
       end
     end
 
-    # Método para somar os minutos, unidades e bytes
+    # Método que realiza as somas para exibição na tela do usuário.
     def sum_bill calls
       results = {local: 0, long_distance: 0, sms: 0, internet: 0}
       calls.each do |call|
@@ -47,7 +55,7 @@ module Billing
       results
     end
 
-    # Método para converter string para minutos
+    # Método que converte string para float e realiza o cálculo de minutos.
     def string_to_minutes time_string
       return 0 if time_string.nil?
         minutes = time_string.split("m").first.to_f
@@ -55,7 +63,7 @@ module Billing
         minutes + seconds / 60
     end
 
-    # Método para converter string para bytes
+    # Método que converte string para float e realiza o cálculo de bytes.
     def string_to_bytes byte_string
       return 0 if byte_string.nil?
         byte = byte_string.split(" ")
@@ -63,7 +71,7 @@ module Billing
         byte_float * 1000
     end
 
-    # Método para formatação do resultado na tela
+    # Método para exibir o resultado formatado ao cliente.
     def show_formated_result total
       puts "============ Resultados de sua conta telefônica ========================"
       sleep 1
@@ -78,11 +86,23 @@ module Billing
       puts "============ Obrigado por usar o Billing - By Pery Lemke ==============="
     end
 
-    # Encontrando as words relacionadas ao numero
-    rows_number = find_by_number "#{ARGV[1]}"
-    # Fazendo os calculos
-    total = sum_bill rows_number
-    # Imprimindo
-    show_formated_result total
+    # Método de execução do sistema
+    def execute
+      # Executando método para validação do arquivo.
+      validate
+      if validate == true
+        # Encontrando as words relacionadas ao numero
+        rows_number = find_by_number "#{ARGV[1]}"
+        # Fazendo os calculos
+        total = sum_bill rows_number
+        # Imprimindo
+        show_formated_result total
+      else
+        puts "Arquivo inválido - Só é aceito arquivos que tenham delimitadores."
+      end
+    end
+
+    # Chamando método de execução
+    execute
   end
 end
