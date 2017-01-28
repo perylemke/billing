@@ -33,7 +33,7 @@ module Billing
 
     # Método para somar os minutos, unidades e bytes
     def sum_bill calls
-      results = {"local": 0, "long_distance": 0, "sms": 0, "internet": 0}
+      results = {local: 0, long_distance: 0, sms: 0, internet: 0}
       calls.each do |call|
         type = call_type call[6]
         if type == :local or type == :long_distance
