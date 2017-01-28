@@ -8,7 +8,7 @@ module Billing
     # Método para encontrar no arquivo o número
     def find_by_number number
       results = []
-      CSV.foreach('sample-tim.csv', {:col_sep => ';'}) do |row|
+      CSV.foreach("#{ARGV[0]}", {:col_sep => ';'}) do |row|
         if row[3] == number
           results << row
         end
@@ -79,7 +79,7 @@ module Billing
     end
 
     # Encontrando as words relacionadas ao numero
-    rows_number = find_by_number "048-8824-5904"
+    rows_number = find_by_number "#{ARGV[1]}"
     # Fazendo os calculos
     total = sum_bill rows_number
     # Imprimindo
