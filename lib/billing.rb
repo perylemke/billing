@@ -5,11 +5,10 @@ require "csv"
 require 'csvlint'
 
 module Billing
-  class Bill
-
+  extend self
     # Método para validação do arquivo.
-    def validate
-      validator = Csvlint::Validator.new( File.new("#{ARGV[0]}" ))
+    def validate (arq = "#{ARGV[0]}")
+      validator = Csvlint::Validator.new( File.new("#{arq}" ))
       validator.valid?
     end
 
@@ -87,12 +86,12 @@ module Billing
     end
 
     # Método de execução do sistema
-    def execute
+    def execute (arq = "#{ARGV[0]}", tel = "#{ARGV[1]}")
       # Executando método para validação do arquivo.
-      validate
+      validate arq
       if validate == true
         # Encontrando as words relacionadas ao numero
-        rows_number = find_by_number "#{ARGV[1]}"
+        rows_number = find_by_number tel
         # Fazendo os calculos
         total = sum_bill rows_number
         # Imprimindo
@@ -102,7 +101,4 @@ module Billing
       end
     end
 
-    # Chamando método de execução
-    execute
-  end
 end
