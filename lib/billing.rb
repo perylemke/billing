@@ -100,5 +100,4 @@ module Billing
         puts "Arquivo inválido - Só é aceito arquivos que tenham delimitadores."
       end
     end
-
 end
