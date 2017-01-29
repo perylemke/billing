@@ -120,4 +120,40 @@ describe Billing do
     end
   end
 
+  # Teste para verificar se não está retornando uma string ao invés de float
+  context "test validation if not return a string" do
+    it "will pass a sting, and hope convert to a float" do
+      time_string = "03m55s"
+      result = Billing.string_to_minutes time_string
+      expect(result.is_a? String).to eq(false)
+    end
+  end
+
+  # Teste para verificar se está retornando 0
+  context "test validation if return 0" do
+    it "will pass a nil value, and returns 0" do
+      time_string = nil
+      result = Billing.string_to_minutes time_string
+      expect(result).to eq(0)
+    end
+  end
+
+  # Teste para verificar se não está retornando uma string ao invés de float
+  context "test validation if not return a string" do
+    it "will pass a sting, and hope convert to a float in bytes" do
+      byte_string = "13,00000 Kb"
+      result = Billing.string_to_bytes byte_string
+      expect(result.is_a? String).to eq(false)
+    end
+  end
+
+  # Teste para verificar se não está retornando uma string
+  context "test validation if return 0 in bytes" do
+    it "will pass a nil value, and returns 0 in bytes" do
+      byte_string = nil
+      result = Billing.string_to_bytes byte_string
+      expect(result).to eq(0)
+    end
+  end
+
 end
