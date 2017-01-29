@@ -13,9 +13,9 @@ module Billing
     end
 
     # Método que encontra os resultados no arquivo passado como parâmetro.
-    def find_by_number number
+    def find_by_number (arq = "#{ARGV[0]}", number = "#{ARGV[1]}")
       results = []
-      CSV.foreach("#{ARGV[0]}", {:col_sep => ';'}) do |row|
+      CSV.foreach(arq, {:col_sep => ';'}) do |row|
         if row[3] == number
           results << row
         end
@@ -91,7 +91,7 @@ module Billing
       validate arq
       if validate == true
         # Encontrando as words relacionadas ao numero
-        rows_number = find_by_number tel
+        rows_number = find_by_number arq, tel
         # Fazendo os calculos
         total = sum_bill rows_number
         # Imprimindo
