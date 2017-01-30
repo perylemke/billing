@@ -7,7 +7,7 @@ Welcome to Billing! In this directory, you'll find the files you need to be able
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'billing_pery', '~> 0.3.1'
+gem 'billing_pery', '~> 0.3.2'
 ```
 
 And then execute:
